@@ -1,5 +1,5 @@
 {
-  "name": "@vulk/mcp-server",
+  "name": "vulk-mcp-server",
   "version": "1.0.0",
   "description": "VULK MCP Server — Generate, edit, deploy, and manage full-stack web applications from any AI coding tool.",
   "keywords": [
@@ -18,11 +18,11 @@
   ],
   "homepage": "https://vulk.dev",
   "bugs": {
-    "url": "https://github.com/devjoaocastro/vulk-mcp-server/issues"
+    "url": "https://github.com/VULK-dev/vulk-mcp-server/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/devjoaocastro/vulk-mcp-server.git"
+    "url": "https://github.com/VULK-dev/vulk-mcp-server.git"
   },
   "license": "MIT",
   "author": {

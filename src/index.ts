@@ -21,14 +21,14 @@
  *   subscribe — Get a checkout link to upgrade your VULK plan
  *
  * Usage:
- *   npx @vulk/mcp-server
+ *   npx vulk-mcp-server
  *
  * Config (Claude Desktop / Cursor / Windsurf / VS Code):
  *   {
  *     "mcpServers": {
  *       "vulk": {
  *         "command": "npx",
- *         "args": ["-y", "@vulk/mcp-server"],
+ *         "args": ["-y", "vulk-mcp-server"],
  *         "env": { "VULK_API_KEY": "vk_sk_..." }
  *       }
  *     }

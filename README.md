@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@vulk/mcp-server"><img src="https://img.shields.io/npm/v/@vulk/mcp-server?color=0D9373" alt="npm" /></a>
+  <a href="https://www.npmjs.com/package/vulk-mcp-server"><img src="https://img.shields.io/npm/v/vulk-mcp-server?color=0D9373" alt="npm" /></a>
   <a href="https://vulk.dev"><img src="https://img.shields.io/badge/vulk.dev-live-0D9373" alt="VULK" /></a>
   <a href="https://github.com/vulkdev/vulk-mcp-server/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
 </p>
@@ -56,7 +56,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "vulk": {
       "command": "npx",
-      "args": ["-y", "@vulk/mcp-server"],
+      "args": ["-y", "vulk-mcp-server"],
       "env": {
         "VULK_API_KEY": "vk_sk_your_key_here"
       }
@@ -73,7 +73,7 @@ Settings → MCP Servers → Add:
 {
   "vulk": {
     "command": "npx",
-    "args": ["-y", "@vulk/mcp-server"],
+    "args": ["-y", "vulk-mcp-server"],
     "env": {
       "VULK_API_KEY": "vk_sk_your_key_here"
     }
@@ -90,7 +90,7 @@ Create `.vscode/mcp.json`:
   "servers": {
     "vulk": {
       "command": "npx",
-      "args": ["-y", "@vulk/mcp-server"],
+      "args": ["-y", "vulk-mcp-server"],
       "env": {
         "VULK_API_KEY": "vk_sk_your_key_here"
       }
@@ -107,7 +107,7 @@ Add to MCP settings:
 {
   "vulk": {
     "command": "npx",
-    "args": ["-y", "@vulk/mcp-server"],
+    "args": ["-y", "vulk-mcp-server"],
     "env": {
       "VULK_API_KEY": "vk_sk_your_key_here"
     }
