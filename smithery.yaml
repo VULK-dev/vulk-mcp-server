@@ -1,0 +1,16 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      vulkApiKey:
+        type: string
+        description: "Your VULK API key (get at vulk.dev/settings/api-keys)"
+    required:
+      - vulkApiKey
+  commandFunction: |-
+    (config) => ({
+      command: "npx",
+      args: ["-y", "vulk-mcp-server"],
+      env: { VULK_API_KEY: config.vulkApiKey }
+    })

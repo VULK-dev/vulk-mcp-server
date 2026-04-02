@@ -57,5 +57,6 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "mcpName": "io.github.VULK-dev/vulk-mcp-server"
 }
