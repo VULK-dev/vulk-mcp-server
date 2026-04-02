@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  Give Claude, Cursor, Windsurf, or VS Code Copilot the ability to generate, edit, deploy, and export production-ready applications — powered by <a href="https://vulk.dev">VULK</a>.
+  Give Claude, Cursor, Windsurf, VS Code Copilot, or Gemini CLI the ability to generate, edit, deploy, and export production-ready applications — powered by <a href="https://vulk.dev">VULK</a>.
 </p>
 
 ---
@@ -114,6 +114,22 @@ Add to MCP settings:
   }
 }
 ```
+
+### Gemini CLI
+
+Install the extension directly from GitHub:
+
+```bash
+gemini extensions install VULK-dev/vulk-mcp-server
+```
+
+Then set your API key:
+
+```bash
+export VULK_API_KEY="vk_sk_your_key_here"
+```
+
+Or configure it in the extension settings when prompted. The extension uses the same MCP server under the hood, giving you access to all VULK tools (generate, edit, deploy, etc.) directly from Gemini CLI.
 
 ## Get Your API Key
 

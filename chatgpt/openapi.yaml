@@ -1,0 +1,610 @@
+openapi: 3.1.0
+info:
+  title: VULK - AI App Builder API
+  description: |
+    Public API for VULK (vulk.dev), an AI-powered application builder.
+    Build full-stack web applications from natural language prompts.
+
+    ## Authentication
+    All endpoints require a Bearer token (API key) in the `Authorization` header.
+    API keys start with `vk_sk_` and can be generated at https://vulk.dev/settings/api-keys
+
+    ## Rate Limits
+    - Credit purchases: 10 per hour
+    - General endpoints: 60 per minute
+  version: "1.0.0"
+  contact:
+    name: VULK Support
+    url: https://support.vulk.dev
+    email: support@vulk.dev
+  termsOfService: https://vulk.dev/terms-conditions
+  license:
+    name: Proprietary
+    url: https://vulk.dev/terms-conditions
+
+servers:
+  - url: https://vulk.dev
+    description: Production
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: "vk_sk_*"
+      description: "API key starting with vk_sk_, obtained from https://vulk.dev/settings/api-keys"
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+      required:
+        - error
+
+    ProjectSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique project identifier
+        prompt:
+          type: string
+          description: The original prompt used to create the project
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deploymentUrl:
+          type: ["string", "null"]
+          description: URL where the project is deployed (if deployed)
+        customSubdomain:
+          type: ["string", "null"]
+          description: Custom subdomain on vulk.host (if set)
+        visibility:
+          type: ["string", "null"]
+          enum: [public, private, unlisted, null]
+
+    ProjectDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        prompt:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deployedUrl:
+          type: ["string", "null"]
+        customSubdomain:
+          type: ["string", "null"]
+        visibility:
+          type: ["string", "null"]
+          enum: [public, private, unlisted, null]
+        uiType:
+          type: string
+          description: "Type of project (e.g. 'web')"
+
+    ProjectCreated:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        prompt:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    ProjectFile:
+      type: object
+      properties:
+        path:
+          type: string
+          description: "File path relative to project root (e.g. src/App.tsx)"
+        content:
+          type: string
+          description: Full file content
+        language:
+          type: ["string", "null"]
+          description: "Programming language (e.g. typescript, css)"
+        size:
+          type: ["integer", "null"]
+          description: File size in bytes
+
+    Pagination:
+      type: object
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    CreditPackage:
+      type: object
+      properties:
+        credits:
+          type: integer
+          description: Number of credits in the package
+        price:
+          type: number
+          format: float
+          description: Price in USD
+        currency:
+          type: string
+          enum: [usd]
+        pricePerCredit:
+          type: number
+          format: float
+        discount:
+          type: number
+          format: float
+          description: Discount percentage (only present if > 0)
+        popular:
+          type: boolean
+          description: Whether this is the recommended package (only present if true)
+
+    Model:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Model identifier for API calls (e.g. claude-sonnet-4-20250514)"
+        name:
+          type: string
+          description: "Human-readable model name (e.g. Claude Sonnet 4)"
+        provider:
+          type: string
+          description: "Model provider (e.g. anthropic, openai, google)"
+        category:
+          type: string
+          description: "Model category (e.g. flagship, fast, reasoning)"
+        contextWindow:
+          type: integer
+          description: Maximum context window in tokens
+        multiplier:
+          type: number
+          format: float
+          description: Credit cost multiplier (1.0 = standard rate)
+
+    ApiKeyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: User-defined name for the API key
+        keyPrefix:
+          type: string
+          description: "First characters of the key (e.g. vk_sk_abc...)"
+        usageCount:
+          type: integer
+        lastUsedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    UsageLogEntry:
+      type: object
+      properties:
+        endpoint:
+          type: string
+        method:
+          type: string
+          enum: [GET, POST, DELETE, PUT, PATCH]
+        statusCode:
+          type: integer
+        tokensUsed:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+paths:
+  /api/v1/projects:
+    get:
+      operationId: listProjects
+      summary: List user's projects
+      description: Returns a paginated list of all projects owned by the authenticated user, ordered by creation date (newest first).
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of projects to return (max 100)
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of projects to skip for pagination
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProjectSummary"
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+        "401":
+          description: Unauthorized - invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      operationId: createProject
+      summary: Create a new project
+      description: |
+        Creates a new VULK project from a natural language prompt.
+        The AI will generate a complete web application based on your description.
+        This consumes credits based on the model used.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - prompt
+              properties:
+                prompt:
+                  type: string
+                  description: "Natural language description of the application to build (e.g. 'A modern portfolio website with dark mode and contact form')"
+                  minLength: 1
+                model:
+                  type: string
+                  description: "AI model ID to use. Get available models from GET /api/v1/models. If omitted, uses the default model."
+      responses:
+        "201":
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    $ref: "#/components/schemas/ProjectCreated"
+        "400":
+          description: Bad request - prompt is required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/projects/{id}:
+    get:
+      operationId: getProject
+      summary: Get project details
+      description: Returns full details for a specific project owned by the authenticated user.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Project ID
+      responses:
+        "200":
+          description: Project details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    $ref: "#/components/schemas/ProjectDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Project not found or not owned by user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      operationId: deleteProject
+      summary: Delete a project
+      description: Permanently deletes a project and all its associated files. This action cannot be undone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Project ID
+      responses:
+        "200":
+          description: Project deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  deletedAt:
+                    type: string
+                    format: date-time
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/projects/{id}/files:
+    get:
+      operationId: getProjectFiles
+      summary: Get project source files
+      description: Returns all source code files for a project, including their content, language, and size.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Project ID
+      responses:
+        "200":
+          description: Project files
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProjectFile"
+                  total:
+                    type: integer
+                    description: Total number of files
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/credits/balance:
+    get:
+      operationId: getCreditBalance
+      summary: Check credit balance
+      description: Returns the user's current credit balance, active plan name, and monthly credit allowance.
+      responses:
+        "200":
+          description: Credit balance info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  credits:
+                    type: integer
+                    description: Current available credits
+                  plan:
+                    type: string
+                    description: "Active plan name (e.g. 'builder', 'pro', 'team', 'free')"
+                  creditsPerMonth:
+                    type: integer
+                    description: Monthly credit allowance from subscription
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/credits:
+    get:
+      operationId: getCreditPackages
+      summary: Get available credit packages
+      description: Returns the user's current balance and all available credit packages that can be purchased.
+      responses:
+        "200":
+          description: Balance and packages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: integer
+                    description: Current credit balance
+                  packages:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CreditPackage"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      operationId: purchaseCredits
+      summary: Create Stripe checkout for credits
+      description: |
+        Creates a Stripe checkout session to purchase additional credits.
+        Returns a checkout URL that the user must visit to complete payment.
+        Requires an active paid subscription (not free plan).
+        Rate limited to 10 purchases per hour.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - credits
+              properties:
+                credits:
+                  type: integer
+                  description: "Number of credits to purchase. Must match an available package (use GET /api/v1/credits to see options)."
+                successUrl:
+                  type: string
+                  format: uri
+                  description: URL to redirect to after successful payment. Defaults to VULK billing page.
+                cancelUrl:
+                  type: string
+                  format: uri
+                  description: URL to redirect to if payment is cancelled. Defaults to VULK pricing page.
+      responses:
+        "200":
+          description: Checkout session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checkoutUrl:
+                    type: string
+                    format: uri
+                    description: Stripe checkout URL - user must visit this to complete payment
+                  credits:
+                    type: integer
+                    description: Number of credits being purchased
+                  price:
+                    type: number
+                    format: float
+                    description: Total price in USD
+                  currency:
+                    type: string
+                    enum: [usd]
+        "400":
+          description: Invalid credit package
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Active paid subscription required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/models:
+    get:
+      operationId: listModels
+      summary: List available AI models
+      description: Returns all AI models available for project generation, including their provider, context window, and credit cost multiplier.
+      responses:
+        "200":
+          description: Available models
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  models:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Model"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/usage:
+    get:
+      operationId: getUsageStats
+      summary: Get API usage stats
+      description: Returns usage statistics for all API keys owned by the authenticated user, plus recent API call logs for the current key.
+      responses:
+        "200":
+          description: Usage statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apiKeys:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ApiKeyInfo"
+                  recentUsage:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UsageLogEntry"
+                    description: Last 50 API calls for the current key
+                  totalRequests:
+                    type: integer
+                    description: Total requests across all API keys
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

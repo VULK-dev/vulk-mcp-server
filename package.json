@@ -14,7 +14,9 @@
     "model-context-protocol",
     "claude",
     "cursor",
-    "windsurf"
+    "windsurf",
+    "gemini-cli",
+    "gemini-cli-extension"
   ],
   "homepage": "https://vulk.dev",
   "bugs": {
@@ -38,6 +40,7 @@
   },
   "files": [
     "dist",
+    "gemini-extension.json",
     "README.md",
     "LICENSE"
   ],

@@ -1,0 +1,26 @@
+{
+  "name": "vulk",
+  "version": "1.0.1",
+  "description": "Build, edit, deploy, and manage full-stack web applications from Gemini CLI — powered by VULK's AI generation platform with 16+ LLM models.",
+  "settings": [
+    {
+      "name": "API Key",
+      "description": "Your VULK API key (starts with vk_sk_). Get one at https://vulk.dev/settings/api-keys",
+      "envVar": "VULK_API_KEY"
+    },
+    {
+      "name": "API Base URL",
+      "description": "VULK API base URL. Only change if using a self-hosted instance.",
+      "envVar": "VULK_API_BASE"
+    }
+  ],
+  "mcpServers": {
+    "vulk": {
+      "command": "npx",
+      "args": ["-y", "vulk-mcp-server"],
+      "env": {
+        "VULK_API_KEY": "${VULK_API_KEY}"
+      }
+    }
+  }
+}
