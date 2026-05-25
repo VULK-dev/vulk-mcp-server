@@ -13,5 +13,24 @@
       "type": "streamable-http",
       "url": "https://mcp.vulk.dev/mcp"
     }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "vulk-mcp-server",
+      "version": "1.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Your VULK API key (get at vulk.dev/settings/api-keys)",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": true,
+          "name": "VULK_API_KEY"
+        }
+      ]
+    }
   ]
 }
