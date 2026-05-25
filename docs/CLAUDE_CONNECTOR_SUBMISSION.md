@@ -213,8 +213,11 @@ Private during review is acceptable if public docs are ready by publish date.
 
 ## Current Gaps
 
-- Remote MCP gateway and OAuth/PKCE implementation now exist in `vulk-main-v2`; production DNS/deploy must expose them at `https://mcp.vulk.dev/mcp`.
-- OAuth must be exercised through MCP Inspector and Claude custom connector after production deploy.
+- Remote MCP gateway is deployed at `https://mcp.vulk.dev/mcp`.
+- OAuth discovery, Dynamic Client Registration, anonymous authorize redirects, and loopback PKCE redirect handling pass production smoke tests.
+- Official MCP registry metadata is published as `io.github.devjoaocastro/vulk-mcp-server` version `1.1.0` with the remote endpoint.
+- npm `vulk-mcp-server@1.1.0` publish is blocked by npm account OTP/browser authentication; npm latest remains `1.0.2`.
+- OAuth still needs to be exercised through MCP Inspector and Claude custom connector with a real reviewer/test account.
 - Public docs page needs to be published.
 - Test account and screenshots need to be prepared.
 - Claude submission form needs final copy and assets.

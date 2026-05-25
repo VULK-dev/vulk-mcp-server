@@ -150,7 +150,7 @@ When the user asks to build, remix, inspect, edit, or deploy an immersive websit
 Current state:
 
 - Local stdio MCP exists and builds.
-- npm package exists.
+- npm package exists. `1.1.0` is prepared locally, but npm latest remains `1.0.2` until account OTP/browser authentication is completed.
 - Registry metadata exists: `server.json`, `smithery.yaml`, `glama.json`, `gemini-extension.json`.
 - VULK API has project create/list/get/files endpoints.
 - Generation pipeline supports project-level generation and internal 3D/video capabilities.
@@ -165,10 +165,11 @@ Current state:
 - Codex plugin bundle exists in this repository at `codex-plugin/`.
 - Repo-local Codex plugin scaffold also exists in the VULK workspace at `plugins/vulk`.
 - Repo-local Codex marketplace entry also exists in the VULK workspace at `.agents/plugins/marketplace.json`.
+- Production remote MCP is live at `https://mcp.vulk.dev/mcp`.
+- Official MCP registry metadata is published for `io.github.devjoaocastro/vulk-mcp-server` version `1.1.0`.
 
 Needed for public universal distribution:
 
-- Production deploy/DNS verification for `https://mcp.vulk.dev/mcp`.
 - MCP Inspector and Claude custom connector validation against the deployed endpoint.
 - Public docs page, privacy policy section, and support route.
 - Test reviewer account with populated projects.
