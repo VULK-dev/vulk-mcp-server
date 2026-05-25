@@ -1,0 +1,44 @@
+{
+  "name": "vulk",
+  "version": "0.1.0",
+  "description": "Generate, edit, inspect, and deploy immersive VULK web projects from Codex.",
+  "author": {
+    "name": "VULK",
+    "email": "hello@vulk.dev",
+    "url": "https://vulk.dev"
+  },
+  "homepage": "https://vulk.dev",
+  "repository": "https://github.com/VULK-dev/vulk-mcp-server",
+  "license": "MIT",
+  "keywords": [
+    "vulk",
+    "mcp",
+    "prompt-to-immersive-site",
+    "3d-website",
+    "webgl",
+    "codex"
+  ],
+  "skills": "./skills",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "VULK",
+    "shortDescription": "Generate immersive web projects from chat.",
+    "longDescription": "Use VULK from Codex to create, edit, inspect, and deploy 3D/WebGL, cinematic, video-rich, and moodboard-driven web projects. The plugin connects Codex to the VULK MCP server and keeps project file content opt-in for safer inspection.",
+    "developerName": "VULK",
+    "category": "Web development",
+    "capabilities": [
+      "MCP",
+      "Code generation",
+      "Deploy"
+    ],
+    "websiteURL": "https://vulk.dev",
+    "privacyPolicyURL": "https://vulk.dev/privacy-policy",
+    "termsOfServiceURL": "https://vulk.dev/terms-conditions",
+    "defaultPrompt": [
+      "Use VULK to generate an immersive product website with a 3D hero and deployable code.",
+      "Use VULK to turn this moodboard into a cinematic web experience.",
+      "List my VULK projects and inspect the latest project's file manifest."
+    ],
+    "brandColor": "#0D9373"
+  }
+}

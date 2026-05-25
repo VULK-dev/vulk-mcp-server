@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "vulk": {
+      "command": "npx",
+      "args": ["-y", "vulk-mcp-server"],
+      "env": {
+        "VULK_API_KEY": "${VULK_API_KEY}",
+        "VULK_ENABLE_LEGACY_TOOLS": "false"
+      }
+    }
+  }
+}

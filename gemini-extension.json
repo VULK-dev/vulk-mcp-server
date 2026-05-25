@@ -1,7 +1,7 @@
 {
   "name": "vulk",
-  "version": "1.0.1",
-  "description": "Build, edit, deploy, and manage full-stack web applications from Gemini CLI — powered by VULK's AI generation platform with 16+ LLM models.",
+  "version": "1.1.0",
+  "description": "Generate, edit, inspect, and deploy immersive 3D/WebGL and video-rich web projects from Gemini CLI through VULK.",
   "settings": [
     {
       "name": "API Key",

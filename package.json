@@ -1,7 +1,7 @@
 {
   "name": "vulk-mcp-server",
-  "version": "1.0.2",
-  "description": "VULK MCP Server \u2014 AI app builder for Claude Desktop, Cursor, Windsurf, VS Code. Generate full-stack React, Next.js, Flutter, React Native, Three.js / WebGL, Shopify, and PHP/Laravel apps from prompts, voice, video, screenshots, or Figma. PostgreSQL backend, App Store + Play Store automated submission, BYOM with zero markup. Lovable / Bolt / v0 / Cursor alternative.",
+  "version": "1.1.0",
+  "description": "VULK MCP Server \u2014 prompt-to-immersive-site connector for Claude, Codex, Cursor, Windsurf, VS Code, Gemini CLI, and MCP-compatible agents. Generate, edit, inspect, and deploy 3D/WebGL, video-rich, moodboard-driven, full-stack web projects through VULK.",
   "keywords": [
     "ai-app-builder",
     "ai-code-generation",
@@ -51,14 +51,6 @@
     "apk-build",
     "ipa-build",
     "asc-api",
-    "ai-video-generation",
-    "veo",
-    "sora",
-    "runway",
-    "kling",
-    "hailuo",
-    "luma",
-    "pika",
     "image-to-3d",
     "text-to-3d",
     "trellis",
@@ -84,7 +76,14 @@
     "vulk-mcp",
     "app-builder",
     "code-generation",
-    "prompt-to-app"
+    "prompt-to-app",
+    "prompt-to-immersive-site",
+    "prompt-to-3d-website",
+    "site-to-3d",
+    "moodboard-to-website",
+    "cinematic-web",
+    "immersive-web",
+    "webgl-site-builder"
   ],
   "homepage": "https://vulk.dev",
   "bugs": {
@@ -107,7 +106,12 @@
     "vulk-mcp": "dist/index.js"
   },
   "files": [
+    "codex-plugin",
     "dist",
+    "docs",
+    "server.json",
+    "smithery.yaml",
+    "glama.json",
     "gemini-extension.json",
     "README.md",
     "LICENSE"
@@ -119,8 +123,8 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
-    "zod": "^3.24.0"
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
