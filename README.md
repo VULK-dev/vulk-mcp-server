@@ -4,7 +4,7 @@ VULK's MCP connector lets AI assistants generate, edit, inspect, and deploy VULK
 
 Positioning: prompt-to-immersive-site. Agents can ask VULK for 3D/WebGL, cinematic, video-rich, moodboard-driven, full-stack web projects and get back preview/editor/deploy URLs.
 
-This package is the local stdio MCP server. Public directory submissions should expose the same tool surface through a remote HTTPS MCP server with OAuth 2.0.
+This package is the local stdio MCP server. The public remote connector uses the same tool surface at `https://mcp.vulk.dev/mcp` over HTTPS Streamable HTTP with OAuth 2.0 / PKCE.
 
 ## What VULK Does
 
@@ -18,6 +18,19 @@ This package is the local stdio MCP server. Public directory submissions should 
 The connector does not expose provider API keys, internal prompts, customer data outside the authenticated account, or standalone raw media-generation tools.
 
 ## Quick Setup
+
+Remote connector URL for Claude/Codex/agents that support remote MCP:
+
+```text
+https://mcp.vulk.dev/mcp
+```
+
+The remote endpoint discovers OAuth through:
+
+- `https://mcp.vulk.dev/.well-known/oauth-protected-resource/mcp`
+- `https://vulk.dev/.well-known/oauth-authorization-server`
+
+Local stdio setup:
 
 Get an API key at https://vulk.dev/settings/api-keys.
 
@@ -65,7 +78,7 @@ Legacy aliases (`generate`, `edit`, `list`, `get`, `files`, `deploy`, `models`, 
 ## Security Defaults
 
 - All tools call VULK first-party APIs only.
-- Authentication uses `VULK_API_KEY` for this local package. Public Claude/Codex directory builds should use remote MCP over HTTPS with OAuth 2.0.
+- Authentication uses `VULK_API_KEY` for this local package. The remote MCP uses OAuth 2.0 with PKCE, dynamic client registration, scoped opaque access tokens, and refresh-token rotation.
 - Tool annotations mark read-only, write, and destructive operations for compatible clients.
 - `get_project_files` returns only a manifest unless `includeContent=true`.
 - Sensitive-looking files such as `.env`, private keys, credentials, service-account files, `.npmrc`, and certificate/key files are redacted.
@@ -85,6 +98,7 @@ Legacy aliases (`generate`, `edit`, `list`, `get`, `files`, `deploy`, `models`, 
 ## Distribution Targets
 
 - Local MCP package: `npx -y vulk-mcp-server`
+- Remote MCP: `https://mcp.vulk.dev/mcp`
 - Official MCP Registry: `server.json`
 - Smithery: `smithery.yaml`
 - Glama: `glama.json`

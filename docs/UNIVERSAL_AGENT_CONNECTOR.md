@@ -52,7 +52,7 @@ The remote MCP endpoint is the primary public product. The local npm MCP remains
 - URL: `https://mcp.vulk.dev/mcp`
 - Transport: HTTPS Streamable HTTP MCP
 - Auth: OAuth 2.0 with PKCE
-- Scopes: `projects:read`, `projects:create`, `projects:edit`, `projects:deploy`, `files:read`, `usage:read`
+- Scopes: `projects.read`, `projects.create`, `projects.edit`, `projects.deploy`, `usage.read`, `billing.read`
 - Public review mode: expose only clean tool names, no legacy aliases
 
 2. Local MCP package
@@ -156,14 +156,20 @@ Current state:
 - Generation pipeline supports project-level generation and internal 3D/video capabilities.
 - MCP now has public tool names, annotations, redacted file reads, and legacy toggle.
 - Backend ownership checks were strengthened for `uiId` and `projectId`.
+- Remote MCP gateway implementation exists in `vulk-main-v2`:
+  - `GET/POST/DELETE /mcp` and `/api/mcp`
+  - `/.well-known/oauth-protected-resource` and `/.well-known/oauth-protected-resource/mcp`
+  - `/.well-known/oauth-authorization-server`
+  - `/oauth/register`, `/oauth/authorize`, `/oauth/token`
+  - DCR, PKCE S256, refresh-token rotation, scoped opaque access tokens, Origin validation, and `WWW-Authenticate` discovery.
 - Codex plugin bundle exists in this repository at `codex-plugin/`.
 - Repo-local Codex plugin scaffold also exists in the VULK workspace at `plugins/vulk`.
 - Repo-local Codex marketplace entry also exists in the VULK workspace at `.agents/plugins/marketplace.json`.
 
 Needed for public universal distribution:
 
-- Remote MCP gateway at `https://mcp.vulk.dev/mcp`.
-- OAuth 2.0 with PKCE and scoped tokens.
+- Production deploy/DNS verification for `https://mcp.vulk.dev/mcp`.
+- MCP Inspector and Claude custom connector validation against the deployed endpoint.
 - Public docs page, privacy policy section, and support route.
 - Test reviewer account with populated projects.
 - Claude submission form assets and examples.

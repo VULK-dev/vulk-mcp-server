@@ -94,28 +94,28 @@ Expose only:
 
 Minimum scopes:
 
-- `projects:read`
-- `projects:create`
-- `projects:edit`
-- `projects:deploy`
-- `files:read`
-- `usage:read`
+- `projects.read`
+- `projects.create`
+- `projects.edit`
+- `projects.deploy`
+- `usage.read`
+- `billing.read`
 
 Scope mapping:
 
 | Tool | Required scope |
 | --- | --- |
-| `create_visual_brief` | none or `projects:create` if server-side |
-| `generate_immersive_site` | `projects:create` |
-| `create_project` | `projects:create` |
-| `edit_project` | `projects:edit` |
-| `list_projects` | `projects:read` |
-| `get_project` | `projects:read` |
-| `get_project_files` | `files:read` |
-| `deploy_project` | `projects:deploy` |
-| `list_models` | `usage:read` or `projects:read` |
-| `get_usage` | `usage:read` |
-| `subscribe` | none or `usage:read` |
+| `create_visual_brief` | authenticated token, no project-data scope |
+| `generate_immersive_site` | `projects.create` |
+| `create_project` | `projects.create` |
+| `edit_project` | `projects.edit` |
+| `list_projects` | `projects.read` |
+| `get_project` | `projects.read` |
+| `get_project_files` | `projects.read` |
+| `deploy_project` | `projects.deploy` |
+| `list_models` | authenticated token |
+| `get_usage` | `usage.read` |
+| `subscribe` | `billing.read` |
 
 ## Allowed Link URIs
 
@@ -213,8 +213,8 @@ Private during review is acceptable if public docs are ready by publish date.
 
 ## Current Gaps
 
-- `https://mcp.vulk.dev/mcp` remote MCP gateway still needs implementation/deploy.
-- OAuth app and scope enforcement still need implementation.
+- Remote MCP gateway and OAuth/PKCE implementation now exist in `vulk-main-v2`; production DNS/deploy must expose them at `https://mcp.vulk.dev/mcp`.
+- OAuth must be exercised through MCP Inspector and Claude custom connector after production deploy.
 - Public docs page needs to be published.
 - Test account and screenshots need to be prepared.
 - Claude submission form needs final copy and assets.
