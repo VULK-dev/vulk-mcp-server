@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.devjoaocastro/vulk-mcp-server",
   "title": "VULK",
-  "description": "Generate, edit, inspect, and deploy immersive 3D/WebGL and video-rich web projects from any MCP-compatible AI assistant.",
+  "description": "Generate, edit, and deploy immersive 3D/WebGL web projects from any MCP assistant.",
   "repository": {
     "url": "https://github.com/VULK-dev/vulk-mcp-server",
     "source": "github"
