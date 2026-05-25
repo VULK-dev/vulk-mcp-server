@@ -218,6 +218,7 @@ Private during review is acceptable if public docs are ready by publish date.
 - npm `vulk-mcp-server@1.1.0` is published and is the npm `latest` dist-tag.
 - Official MCP registry metadata is published as `io.github.devjoaocastro/vulk-mcp-server` version `1.1.1` with both the remote endpoint and npm package metadata.
 - OAuth still needs to be exercised through MCP Inspector and Claude custom connector with a real reviewer/test account.
+- Claude directory submission still requires a logged-in Claude/Anthropic review flow; no submit token/session is available from this environment.
 - Public docs page needs to be published.
 - Test account and screenshots need to be prepared.
 - Claude submission form needs final copy and assets.
