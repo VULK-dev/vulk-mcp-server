@@ -167,7 +167,7 @@ Current state:
 - Repo-local Codex marketplace entry also exists in the VULK workspace at `.agents/plugins/marketplace.json`.
 - Production remote MCP is live at `https://mcp.vulk.dev/mcp`.
 - Official MCP registry metadata is published for `io.github.devjoaocastro/vulk-mcp-server` version `1.1.1` with both remote MCP and npm package metadata.
-- Codex plugin bundle validates locally. Latest checked package: `/tmp/vulk-codex-plugin.tgz`, SHA-256 `76c0e6826df01e27012545680343f654049a16f4bc15c528fa9cd02598fa483d`.
+- Codex plugin bundle validates locally. Latest regenerated package: `/tmp/vulk-codex-plugin.tgz`, SHA-256 `afbede10a75fa79c0d36bbfdceb2ed43fb3645db71608320b6a6855881b7954a`.
 - Smithery CLI publish requires a Smithery API key from `https://smithery.ai/account/api-keys`; no key is configured in this environment.
 - Glama metadata file exists at `glama.json`; public API discovery did not expose a direct publish endpoint during this pass.
 
