@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.devjoaocastro/vulk-mcp-server",
+  "name": "io.github.VULK-dev/vulk-mcp-server",
   "title": "VULK",
   "description": "Create and continue apps and websites with your own VULK plan and credits.",
   "websiteUrl": "https://vulk.dev",
