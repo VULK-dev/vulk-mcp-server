@@ -1,26 +1,11 @@
 {
   "name": "vulk",
-  "version": "1.1.0",
-  "description": "Generate, edit, inspect, and deploy immersive 3D/WebGL and video-rich web projects from Gemini CLI through VULK.",
-  "settings": [
-    {
-      "name": "API Key",
-      "description": "Your VULK API key (starts with vk_sk_). Get one at https://vulk.dev/settings/api-keys",
-      "envVar": "VULK_API_KEY"
-    },
-    {
-      "name": "API Base URL",
-      "description": "VULK API base URL. Only change if using a self-hosted instance.",
-      "envVar": "VULK_API_BASE"
-    }
-  ],
+  "version": "1.2.0",
+  "description": "Create and continue apps and websites with your own VULK plan and credits, from Gemini CLI.",
   "mcpServers": {
     "vulk": {
-      "command": "npx",
-      "args": ["-y", "vulk-mcp-server"],
-      "env": {
-        "VULK_API_KEY": "${VULK_API_KEY}"
-      }
+      "httpUrl": "https://app.vulk.dev/mcp",
+      "oauth": { "enabled": true }
     }
   }
 }

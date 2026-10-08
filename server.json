@@ -2,35 +2,17 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.devjoaocastro/vulk-mcp-server",
   "title": "VULK",
-  "description": "Generate, edit, and deploy immersive 3D/WebGL web projects from any MCP assistant.",
+  "description": "Create and continue apps and websites with your own VULK plan and credits.",
+  "websiteUrl": "https://vulk.dev",
   "repository": {
     "url": "https://github.com/VULK-dev/vulk-mcp-server",
     "source": "github"
   },
-  "version": "1.1.1",
+  "version": "1.2.0",
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.vulk.dev/mcp"
-    }
-  ],
-  "packages": [
-    {
-      "registryType": "npm",
-      "identifier": "vulk-mcp-server",
-      "version": "1.1.0",
-      "transport": {
-        "type": "stdio"
-      },
-      "environmentVariables": [
-        {
-          "description": "Your VULK API key (get at vulk.dev/settings/api-keys)",
-          "isRequired": true,
-          "format": "string",
-          "isSecret": true,
-          "name": "VULK_API_KEY"
-        }
-      ]
+      "url": "https://app.vulk.dev/mcp"
     }
   ]
 }
