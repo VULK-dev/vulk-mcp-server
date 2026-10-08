@@ -1,0 +1,9 @@
+{
+  "name": "vulk",
+  "displayName": "VULK",
+  "version": "1.2.0",
+  "description": "Create and continue apps and websites with your own VULK plan and credits, from Cursor.",
+  "author": { "name": "VULK", "email": "support@vulk.dev" },
+  "license": "MIT",
+  "keywords": ["cursor", "plugin", "mcp", "app-builder", "website-builder", "vulk"]
+}
