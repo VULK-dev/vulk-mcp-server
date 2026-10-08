@@ -1,120 +1,76 @@
-# VULK MCP Server
+# VULK MCP connector
 
-VULK's MCP connector lets AI assistants generate, edit, inspect, and deploy VULK projects from chat.
+VULK builds apps and websites from a written brief. This connector lets an AI assistant work with **your own VULK account** once you have signed in and approved it.
 
-Positioning: prompt-to-immersive-site. Agents can ask VULK for 3D/WebGL, cinematic, video-rich, moodboard-driven, full-stack web projects and get back preview/editor/deploy URLs.
+- **Server URL:** `https://app.vulk.dev/mcp` (alias `https://mcp.vulk.dev/mcp`)
+- **Transport:** remote, Streamable HTTP
+- **Authentication:** OAuth 2.0 authorization code with PKCE (S256), dynamic client registration; no API key
+- **Documentation:** https://support.vulk.dev/docs/api/mcp
+- **Privacy policy:** https://vulk.dev/privacy-policy
 
-This package is the local stdio MCP server. The public remote connector uses the same tool surface at `https://mcp.vulk.dev/mcp` over HTTPS Streamable HTTP with OAuth 2.0 / PKCE.
+## What an assistant can do
 
-## What VULK Does
+- List your projects, read a project's details and, on a paid plan, its source files.
+- Show your plan and renewal date, your credit balance and your usage over the last 30 days.
+- Create a new project, or send the next instruction to an existing one. VULK builds it the way it does in its own editor, using the credits your plan already includes. The assistant can then read the progress, any questions VULK asks, and the link that opens the result in the editor.
+- Stop a request that is still running.
 
-- Creates production VULK projects from natural-language briefs.
-- Generates immersive web experiences using VULK's internal generation pipeline.
-- Edits existing projects from chat instructions.
-- Lists and inspects projects owned by the authenticated account.
-- Returns file manifests safely by default; content must be explicitly requested.
-- Deploys eligible projects to production.
+## What it cannot do
 
-The connector does not expose provider API keys, internal prompts, customer data outside the authenticated account, or standalone raw media-generation tools.
+It cannot publish a site, buy credits, change your plan or delete a project: there is no tool for any of those. If your plan has no credits left, VULK refuses the request. There is no standalone image, video or audio generation tool; media is only ever generated as part of building a project, as one of its design assets.
 
-## Quick Setup
+## Connect
 
-Remote connector URL for Claude/Codex/agents that support remote MCP:
+- **Claude (claude.ai):** Customize › Connectors › Add custom connector, name `VULK`, URL `https://app.vulk.dev/mcp`.
+- **Claude Code:**
 
-```text
-https://mcp.vulk.dev/mcp
-```
+  ```bash
+  claude mcp add --transport http vulk https://app.vulk.dev/mcp
+  ```
 
-The remote endpoint discovers OAuth through:
+- **Codex CLI:**
 
-- `https://mcp.vulk.dev/.well-known/oauth-protected-resource/mcp`
-- `https://vulk.dev/.well-known/oauth-authorization-server`
+  ```bash
+  codex mcp add vulk --url https://app.vulk.dev/mcp
+  codex mcp login vulk
+  ```
 
-Local stdio setup:
+- **Cursor:** add to `mcp.json`:
 
-Get an API key at https://vulk.dev/settings/api-keys.
+  ```json
+  { "mcpServers": { "vulk": { "url": "https://app.vulk.dev/mcp" } } }
+  ```
 
-```json
-{
-  "mcpServers": {
-    "vulk": {
-      "command": "npx",
-      "args": ["-y", "vulk-mcp-server"],
-      "env": {
-        "VULK_API_KEY": "vk_sk_your_key_here"
-      }
-    }
-  }
-}
-```
+- **Any other MCP client** that supports remote servers with OAuth: add the URL above.
 
-For public/review environments, disable legacy aliases so reviewers see only the clean tool names:
+The first time, you are sent to app.vulk.dev to sign in and see what the connection can do before you approve it.
 
-```json
-{
-  "env": {
-    "VULK_API_KEY": "vk_sk_your_key_here",
-    "VULK_ENABLE_LEGACY_TOOLS": "false"
-  }
-}
-```
+## Tools
 
-## Primary Tools
+| Tool | Scope | What it does |
+|---|---|---|
+| `list_projects` | `projects.read` | Your projects |
+| `get_project` | `projects.read` | One project's details and links |
+| `get_project_files` | `projects.read` | The file index, or one source file per call (paid plans) |
+| `get_usage` | `usage.read` | Plan, renewal date, credit balance, 30-day usage |
+| `open_billing` | none | Returns a link to your own billing page; changes nothing |
+| `create_project` | `projects.write` | Starts a build of a new project from your brief |
+| `continue_project` | `projects.write` | Sends the next instruction or answer to an existing project |
+| `get_operation` | `projects.read` | Reads the persisted state of a build you started |
+| `stop_operation` | `projects.write` | Asks VULK to stop a build that is still running |
 
-- `create_visual_brief` - turn a raw idea, visual reference, URL, Figma, screenshot, video reference, or moodboard into a VULK-ready production brief. Read-only.
-- `generate_immersive_site` - generate a 3D/WebGL, cinematic, video-rich, or moodboard-driven VULK web project. Creates a project and may consume credits.
-- `create_project` - generate a general VULK project from a prompt.
-- `edit_project` - apply a natural-language change to an existing VULK project.
-- `list_projects` - list projects owned by the authenticated account.
-- `get_project` - get project metadata plus preview/editor URLs.
-- `get_project_files` - get a project file manifest; content is opt-in, redacted, and size-limited.
-- `deploy_project` - deploy a project to production.
-- `list_models` - list available VULK models for the account.
-- `get_usage` - inspect credits, usage, and rate limits.
-- `subscribe` - return a VULK pricing URL.
+Reading and building are separate permissions: a connection that was not granted `projects.write` never sees the tools that need it, and a call to one anyway returns a tool error that names the missing permission.
 
-Legacy aliases (`generate`, `edit`, `list`, `get`, `files`, `deploy`, `models`, `usage`) remain enabled by default for existing local users. Set `VULK_ENABLE_LEGACY_TOOLS=false` for the public connector surface.
+## Permissions, data and revocation
 
-## Security Defaults
+- A connection lasts up to 90 days (refresh tokens rotate on every use) and you can remove it at any time in **Settings › Integrations › Connected apps** at app.vulk.dev.
+- The connector reads and writes only inside the signed-in account: its projects, plan, credits and usage. The text you ask the assistant to build is sent to VULK as the project brief (up to 8,000 characters).
+- Each build request carries a `request_id`; repeating a request with the same id returns the same receipt instead of building twice.
 
-- All tools call VULK first-party APIs only.
-- Authentication uses `VULK_API_KEY` for this local package. The remote MCP uses OAuth 2.0 with PKCE, dynamic client registration, scoped opaque access tokens, and refresh-token rotation.
-- Tool annotations mark read-only, write, and destructive operations for compatible clients.
-- `get_project_files` returns only a manifest unless `includeContent=true`.
-- Sensitive-looking files such as `.env`, private keys, credentials, service-account files, `.npmrc`, and certificate/key files are redacted.
-- File content responses are capped to 50 KB by default and 200 KB maximum.
-- Edit context sent back to VULK is capped by `VULK_MCP_MAX_EDIT_CONTEXT_BYTES` and excludes sensitive-looking paths.
-- The backend validates project ownership before generation or file mutation.
+## Legacy local package
 
-## Environment Variables
-
-| Variable | Required | Default | Description |
-| --- | --- | --- | --- |
-| `VULK_API_KEY` | Yes | - | VULK API key starting with `vk_sk_`. |
-| `VULK_API_BASE` | No | `https://vulk.dev` | VULK API base URL. |
-| `VULK_ENABLE_LEGACY_TOOLS` | No | `true` | Set to `false` for the public review surface. |
-| `VULK_MCP_MAX_EDIT_CONTEXT_BYTES` | No | `2000000` | Max safe file context sent for edits. |
-
-## Distribution Targets
-
-- Local MCP package: `npx -y vulk-mcp-server`
-- Remote MCP: `https://mcp.vulk.dev/mcp`
-- Official MCP Registry: `server.json`
-- Smithery: `smithery.yaml`
-- Glama: `glama.json`
-- Gemini CLI: `gemini-extension.json`
-- Codex plugin bundle: `codex-plugin/`
-- Claude Connectors Directory: use the remote OAuth MCP build described in `docs/CLAUDE_CONNECTOR_SUBMISSION.md`
-- Codex extensions/plugins: use the plugin and marketplace plan in `docs/UNIVERSAL_AGENT_CONNECTOR.md`
-
-## Development
-
-```bash
-npm install
-npm run build
-VULK_API_KEY=vk_sk_... node dist/index.js
-```
+The npm packages `vulk-mcp-server` (1.1.0 and earlier) and `@vulk/mcp-server` (1.0.0) are separate local command-line packages (they run on your own machine) from before this connector. They authenticate with an API key (`VULK_API_KEY`) instead of OAuth and expose different tools. This connector does not use them, and their tool names and behaviour are not described here.
 
 ## License
 
-MIT
+MIT. See `LICENSE`.
